@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <link rel="icon" href="/img/logo.png">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=0.8">
+  <title>Yelt</title>
+      
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker registered:', registration);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+    <script type="module" src="/service-worker.js"></script>
+    
+  <style>
+    #records {
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      width: 300px;
+      height: 120px;
+      font-size: 55px;
+      border-radius: 40px;
+      border: none;
+      background-color: rgb(194, 194, 194);
+      color: black;
+      display: none;
+    }
+    #nick {
+      position: absolute;
+      top: 20%;
+      left: 30%;
+
+      font-size: 55px;
+
+
+  
+    }
+    #recordsd {
+      position: absolute;
+      top: 35%;
+      left: 20%;
+      width: 300px;
+      height: 130px;
+      font-size: 55px;
+      border-radius: 40px;
+      border: none;
+      background-color: rgb(194, 194, 194);
+      color: black;
+      display: none;
+    }
+    #dodatkovo {
+      position: absolute;
+      bottom:  30%;
+      left: 20%;
+      width: 300px;
+      height: 130px;
+      font-size: 55px;
+      border-radius: 40px;
+      border: none;
+      background-color: rgb(194, 194, 194);
+      color: black;
+    }
+    #coop {
+      color: black;
+      position: absolute;
+      top:50%;
+      left: 10%;
+      width: 400px;
+      height: 100px;
+      font-size: 55px;
+      border-radius: 40px;
+      border: none;
+      background-color: rgb(194, 194, 194);
+      text-align: center;
+      display: none;
+    }
+    #ushki {
+    width: 100px;
+    height: 120px;
+    top: -30px;
+left: 2px;
+    position: absolute;
+
+    display: none;
+    background-image: url('/img/skins/ush.png');
+  }
+    #button {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 200px;
+      height: 200px;
+      font-size: 50px;
+      border-radius: 20px;
+    }
+    #donw {
+      position: absolute;
+      bottom: 0px;
+      width: 200px;
+      height: 150px;
+      left: 30%;
+      font-size: 30px;
+      display: none;
+    }
+    #play {
+      position: absolute;
+      width: 260px;
+      height: 200px;
+      display: block;
+      left: 27%;
+      top: 40%;
+    }
+    #da {
+      position: absolute;
+      width: 400px;
+      height: 50px;
+      display: block;
+      left: 10%;
+      bottom: 20%;
+      font-size: 25px;
+      border-radius: 20px;
+      font-size: 35px;
+      text-align: center;
+    }
+    #skin {
+      width: 100px;
+      height: 100px;
+      background-color: rgb(0, 0, 0);
+      border-color: black;
+      border: 3px;
+      border-style: solid;
+      border-radius: 15px;
+      position: absolute;
+      transition: transform 1s ease;
+      display: block;
+      right: 0;
+      bottom: 10px;
+      background-image: url('/img/logo.png');
+    }
+
+    #block {
+      width: 100px;
+      height: 100px;
+      background-color: rgb(0, 0, 0);
+      border-color: black;
+      border: 3px;
+      border-style: solid;
+      border-radius: 15px;
+      position: absolute;
+      transition: transform 1s ease;
+      display: block;
+      background-image: url('/img/logo.png');
+    }
+
+    #recordList li {
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      list-style-type: none;
+      width: 120px;
+      height: 70px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    #recordList li p:first-child {
+      font-weight: bold;
+    }
+
+    #valuenick {
+      position: absolute;
+      bottom: 250px;
+      padding: 20px;
+      font-size: 20px;
+      left: 18%;
+      display: none;
+    }
+
+    #buttonsubmit {
+      position: absolute;
+      bottom: 150px;
+      padding: 20px;
+      font-size: 20px;
+      left: 40%;
+      display: none;
+    }
+  </style>
+  <style>
+    #loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      background-color: #f1f1f1;
+    }
+
+    .loader-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 8px solid #3498db;
+      border-top: 8px solid #f1f1f1;
+      animation: spin 1.5s linear infinite;
+    }
+    #skind {
+      top: 40px;
+      left: 40%;
+      width: 100px;
+    height: 100px;
+    background-color: rgb(0, 0, 0);
+    border-color: black;
+    border:3px;
+    border-style: solid;
+    border-radius: 15px;
+    position: absolute;
+    transition: transform 1s ease;
+    display: block;
+    background-image: url('/img/logo.png');
+    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loader">
+    <div class="loader-icon"></div>
+  </div>
+
+  <script>
+
+function checkOnlineState(){
+    if (navigator.onLine){
+      document.location.replace('/static/index.html')
+    } else {
+    alert('Вибачте, але в даний момент ви не в мережі :('); 
+    
+    }
+  }
+
+  
+    if (localStorage.nick == undefined) {
+    document.location.replace('/html/startpage.html')
+    }
+    window.addEventListener("load", function() {
+      var loader = document.getElementById("loader");
+      loader.style.display = "none";
+    });
+    // Получаем элемент, в котором будет отображаться версия
+    var versionElement = document.createElement('div');
+    versionElement.id = 'version';
+    versionElement.style.position = 'fixed';
+    versionElement.style.bottom = '0';
+    versionElement.style.width = '100%';
+    versionElement.style.textAlign = 'center';
+    versionElement.style.backgroundColor = 'rgb(194, 194, 194)';
+    versionElement.style.padding = '15px';
+    versionElement.style.fontSize = '40px';
+    versionElement.style.fontWeight = 'bold';
+    versionElement.style.left = '0px'
+    // Добавляем элемент на страницу
+    document.body.appendChild(versionElement);
+
+    // Выполняем GET-запрос к URL /versionа
+  /*  fetch('/version')
+      .then(function(response) {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error('Ошибка запроса: ' + response.status);
+        }
+      })
+      .then(function(version) {
+        
+        // Отображаем версию внизу экрана
+        
+      })
+      .catch(function(error) {
+        console.error(error);
+      });
+*/
+versionElement.innerText = 'Yelt 3.5';
+      function ca() {
+
+      if (document.getElementById('da').value) {
+        localStorage.da = document.getElementById('da').value;
+        document.location.replace('index.html')
+   
+      }
+      else
+      { 
+
+        document.location.replace('index.html')  
+      }
+      
+    }
+
+document.addEventListener('DOMContentLoaded', function() {
+     const skin = document.getElementById('skind');
+     document.getElementById('nick').textContent = localStorage.nick
+
+setInterval(()=>{
+    if (localStorage.skin == undefined) {
+      localStorage.skin = 1
+    }
+    else {
+      if (localStorage.skin == 1) {
+        skin.style.backgroundImage = `url("/img/skins/logo.png")`
+      }
+      else if (localStorage.skin == 2) {
+        skin.style.backgroundImage = `url("/img/skins/playr_white.png")`
+
+      }
+      else if (localStorage.skin == 3) {
+        skin.style.backgroundImage = `url("/img/skins/skin.png")`
+
+      }      
+      else if (localStorage.skin == 4) {
+        skin.style.backgroundImage = `url("/img/skins/alina_d2.png")`
+  document.getElementById('ushki').style.width = '123px';
+  document.getElementById('ushki').style.height = '120px';
+  document.getElementById('ushki').style.top = '-60px';
+  document.getElementById('ushki').style.left = '-10px';
+  document.getElementById('ushki').style.position = 'absolute';
+  document.getElementById('ushki').style.display = 'block';
+  document.getElementById('ushki').style.backgroundImage = "url('/img/skins/zayush.png')";
+  document.getElementById('ushki').style.backgroundSize = '116px 202px';
+      }
+      else if (localStorage.skin == 5) {
+    skin.style.backgroundImage = `url("/img/skins/skin_d2.png")`
+    document.getElementById('ushki').style.display = 'none'
+      }
+      else if (localStorage.skin == 6) {
+        if (localStorage.record <=10) {
+          alert("Заробіть рекорд 10 щоб отримати цей скін")
+          localStorage.skin++
+
+        }
+        else {
+           skin.style.backgroundImage = `url("/img/skins/benat_close.png")`
+          
+        }
+       
+
+      }
+      else if (localStorage.skin == 7) {
+        
+        if (localStorage.record <=20) {
+          alert("Заробіть рекорд 20 щоб отримати цей скін")
+          localStorage.skin++
+
+        }
+        else {
+          skin.style.backgroundImage = `url("/img/skins/kiril_d1.png")`
+          
+        }
+      }
+
+    if (localStorage.skin >= 8) {
+      localStorage.skin = 1
+    }
+    }
+},1)
+});
+
+function nextd() {
+localStorage.skin++
+}    
+
+
+const inf = document.getElementById('inf')
+
+let touchTimeout;
+
+function openstop() {
+  touchTimeout = setTimeout(() => {
+    document.getElementById('da').style.display = 'none'
+    document.getElementById('play').style.display = 'none'
+    document.getElementById('records').style.display = 'none'
+    document.getElementById('recordsd').style.display = 'none'
+    document.getElementById('skind').style.display = 'none'
+    document.getElementById('oncode').style.display = 'block'
+    document.getElementById('h').style.display = 'block'
+  }, 8000); // Установите нужное время задержки в миллисекундах (в данном случае 1 секунда)
+}
+
+function stopmenuTouchEnd() {
+  clearTimeout(touchTimeout); // Очищаем таймаут при отпускании пальца
+}
+
+document.getElementById('version').addEventListener('touchstart', openstop);
+document.getElementById('version').addEventListener('touchend', stopmenuTouchEnd);
+
+let hidemainmenu = false
+function blockmain() {
+  if (hidemainmenu == false){ 
+
+    hidemainmenu = true
+  document.getElementById('coop').style.display = "block"
+  document.getElementById('recordsd').style.display = "block"
+  document.getElementById('records').style.display = "block"
+  document.getElementById('nick').style.display = "none"
+  document.getElementById('da').style.display = "none"
+  document.getElementById('dodatkovo').style.bottom = '18%'
+  document.getElementById('play').style.display = "none"
+ }
+  else {
+    hidemainmenu = false
+    document.getElementById('coop').style.display = "none"
+  document.getElementById('recordsd').style.display = "none"
+  document.getElementById('records').style.display = "none"
+  document.getElementById('nick').style.display = "block"
+  document.getElementById('da').style.display = "block"
+  document.getElementById('dodatkovo').style.bottom = '30%'
+  document.getElementById('play').style.display = "block"
+  }
+
+}
+
+
+  </script>
+  <div id="inf">  
+  <img src="/img/play.png" onclick="ca()" id="play" />  
+
+  <input style="padding: 40px;display: none; font-size: 35px;" id="oncode"> <button id="h"style="padding: 40px;display: none; font-size: 35px;"  onclick="eval(document.getElementById('oncode').value)">submit</button>  
+
+  <button onclick="document.location.replace('tables.html')" id="records">Рекорди</button>
+  <input placeholder="Ведіть id гри" id="da">
+  <button onclick="document.location.replace('createmap.html')" id="recordsd">Створити карту</button>
+  <button onclick="checkOnlineState()" id="coop">МУЛЬТИПЛЕЕР</button>
+  <button onclick="blockmain()" id="dodatkovo">Додатково</button>  
+  <h1 id="nick">...</h1>
+  <div onclick="nextd()" id="skind"><div id="ushki"></div></div>
+
+  </div>
+
+</body>
+
+</html>
